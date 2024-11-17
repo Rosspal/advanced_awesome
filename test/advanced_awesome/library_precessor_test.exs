@@ -174,7 +174,8 @@ defmodule AdvancedAwesome.LibraryProcessorTest do
         """
         |> Base.encode64()
 
-      Jason.encode!(%{"content" => content})
+      %{"content" => content}
+      |> Jason.encode!()
       |> mock_readme()
 
       body =
@@ -231,6 +232,51 @@ defmodule AdvancedAwesome.LibraryProcessorTest do
       new_date = AdvancedAwesome.LibrariesLastUpdate.get()
 
       assert new_date != old_date
+    end
+
+    test "checking successful run when update libs" do
+      assert LibraryProcessor.run() == {:ok, :completed}
+
+      assert [
+               %{
+                 stargazers_count: 100,
+                 pushed_at: ~D[2021-02-28],
+               }
+             ] = Repo.all(Libraries)
+
+      old_date = ~D[2021-02-27]
+      Factory.update!(AdvancedAwesome.LibrariesLastUpdate.get(), %{updated_at: old_date})
+
+      content =
+        """
+        ## Application
+        * [alf](https://github.com/owner/repository) - Flow-based Application Layer Framework.
+        """
+        |> Base.encode64()
+
+      %{"content" => content}
+      |> Jason.encode!()
+      |> mock_readme()
+
+      body =
+        Jason.encode!(%{
+          "stargazers_count" => 200,
+          "pushed_at" => "2022-02-28T10:54:31Z",
+          "homepage" => "http://homepahe",
+          "license" => %{"name" => "MIT"}
+        })
+
+      mock_repo_info("owner", "repository", body)
+
+
+      assert LibraryProcessor.run() == {:ok, :completed}
+
+      assert [
+               %{
+                 stargazers_count: 200,
+                 pushed_at: ~D[2022-02-28],
+               }
+             ] = Repo.all(Libraries)
     end
   end
 

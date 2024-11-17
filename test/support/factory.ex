@@ -19,4 +19,8 @@ defmodule Support.Factory do
   def insert!(factory_name, attributes \\ %{}) do
     factory_name |> build(attributes) |> Repo.insert!()
   end
+
+  def update!(entity, attributes \\ %{}) do
+    entity |> Ecto.Changeset.change(attributes) |> Repo.update!()
+  end
 end
