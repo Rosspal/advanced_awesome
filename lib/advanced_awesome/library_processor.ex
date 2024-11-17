@@ -20,18 +20,22 @@ defmodule AdvancedAwesome.LibraryProcessor do
       LibrariesLastUpdate.set()
       {:ok, :completed}
     else
+      false ->
+        {:ok, :update_not_required}
+
       {:error, error} when error in [:service_unavailable, :unexpected] ->
         {:error, :retry_later}
 
       {:error, :not_found} ->
         {:error, :no_retry}
 
-      false ->
-        {:ok, :update_not_required}
+      unexpected ->
+        Logger.error("Processed: unexpected error: #{inspect(unexpected)}")
+        {:error, :no_retry}
     end
   end
 
-  @spec get :: {:ok, list(map)}
+  @spec get :: {:ok, list(map())}
   def get do
     with {:ok, encode_content} <- Github.get_awesome_readme_content(),
          {:ok, content} <- Base.decode64(encode_content, ignore: :whitespace) do
@@ -62,7 +66,7 @@ defmodule AdvancedAwesome.LibraryProcessor do
     end
   end
 
-  @spec enriching(list(map)) :: list(map)
+  @spec enriching(list(map())) :: list(map())
   def enriching(awesome_libs) do
     enriching_fn =
       fn awesome_lib, acc ->

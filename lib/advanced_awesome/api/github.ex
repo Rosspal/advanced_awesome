@@ -6,6 +6,7 @@ defmodule AdvancedAwesome.API.Github do
   @awesome_repo Confex.fetch_env!(:advanced_awesome, :github)[:awesome_repo]
   @base_url Confex.fetch_env!(:advanced_awesome, :github)[:url]
 
+  @spec get_awesome_readme_content :: {:ok, String.t()} | {:error, :not_found | :service_unavailable | :unexpected}
   def get_awesome_readme_content do
     url = "#{@base_url}/repos/#{@awesome_repo}/readme"
 
@@ -31,6 +32,7 @@ defmodule AdvancedAwesome.API.Github do
     end
   end
 
+  @spec get_repo_info(String.t(), String.t()) :: {:ok, map()} | {:error, :not_found | :forbidden | :unexpected}
   def get_repo_info(owner, repo) do
     url = "#{@base_url}/repos/#{owner}/#{repo}"
 

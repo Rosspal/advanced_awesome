@@ -12,9 +12,10 @@ defmodule AdvancedAwesome.Libraries do
       on_conflict: {:replace_all_except, [:id]},
       conflict_target: [:owner, :repository]
     )
+    :ok
   end
 
-  @spec list_grouped(integer) :: list(map)
+  @spec list_grouped(integer()) :: list(map())
   def list_grouped(min_stars) do
     Libraries
     |> where([l], l.stargazers_count >= ^min_stars)

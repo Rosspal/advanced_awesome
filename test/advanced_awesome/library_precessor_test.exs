@@ -232,6 +232,70 @@ defmodule AdvancedAwesome.LibraryProcessorTest do
 
       assert new_date != old_date
     end
+
+#    test "checking successful run when update libs" do
+#      %{id: last_update_id} = Factory.insert!(:libraries_last_update)
+#
+#      assert LibraryProcessor.run() == {:ok, :completed}
+#
+#      assert [
+#               %{
+#                 owner: "owner",
+#                 repository: "repository",
+#                 description: "Flow-based Application Layer Framework.",
+#                 stargazers_count: 100,
+#                 pushed_at: ~D[2021-02-28],
+#                 homepage: "http://homepahe",
+#                 license: "MIT",
+#                 url: "https://github.com/owner/repository",
+#                 header: "Application"
+#               }
+#             ] = Repo.all(Libraries)
+#
+#      new_date = AdvancedAwesome.LibrariesLastUpdate.get()
+#
+#      assert new_date != old_date
+#
+#      old_date = ~D[2021-02-27]
+#      Factory.update!(:libraries_last_update, %{updated_at: old_date, id: last_update_id})
+#
+#      content =
+#        """
+#        ## Application
+#        * [alf](https://github.com/owner/repository) - Flow-based Application Layer Framework.
+#        """
+#        |> Base.encode64()
+#
+#      Jason.encode!(%{"content" => content})
+#      |> mock_readme()
+#
+#      body =
+#        Jason.encode!(%{
+#          "stargazers_count" => 200,
+#          "pushed_at" => "2022-02-28T10:54:31Z",
+#          "homepage" => "http://homepahe",
+#          "license" => %{"name" => "MIT"}
+#        })
+#
+#      mock_repo_info("owner", "repository", body)
+#
+#
+#      assert LibraryProcessor.run() == {:ok, :completed}
+#
+#      assert [
+#               %{
+#                 owner: "owner",
+#                 repository: "repository",
+#                 description: "Flow-based Application Layer Framework.",
+#                 stargazers_count: 200,
+#                 pushed_at: ~D[2022-02-28],
+#                 homepage: "http://homepahe",
+#                 license: "MIT",
+#                 url: "https://github.com/owner/repository",
+#                 header: "Application"
+#               }
+#             ] = Repo.all(Libraries)
+#    end
   end
 
   def mock_readme(body, status_code \\ 200) do
