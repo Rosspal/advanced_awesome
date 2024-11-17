@@ -2,10 +2,10 @@ import Config
 
 # Configure your database
 config :advanced_awesome, AdvancedAwesome.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "postgres",
+  username: System.get_env("DATABASE_USERNAME", "postgres"),
+  password: System.get_env("POSTGRES_PASSWORD", "postgres"),
+  hostname: System.get_env("POSTGRES_HOST", "pghost"),
+  database: System.get_env("DATABASE_NAME", "postgres"),
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
