@@ -8,7 +8,7 @@ import Config
 config :advanced_awesome, AdvancedAwesome.Repo,
   username: "postgres",
   password: "postgres",
-  hostname: "pghost",
+  hostname: "localhost",
   database: "postgres",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: System.schedulers_online() * 2
