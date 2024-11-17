@@ -1,9 +1,11 @@
 defmodule AdvancedAwesome.LibraryProcessedTest do
-  use AdvancedAwesomeWeb.ConnCase, async: true
+  use AdvancedAwesome.DataCase, async: true
+
+  import Mox
+
   alias AdvancedAwesome.LibraryProcessor
   alias AdvancedAwesome.Repo
   alias AdvancedAwesome.Schemas.Libraries
-  import Mox
 
   @http_client HttpAdapterMock
   @awesome_repo Confex.fetch_env!(:advanced_awesome, :github)[:awesome_repo]
