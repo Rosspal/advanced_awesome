@@ -3,8 +3,8 @@ import Config
 # Configure your database
 config :advanced_awesome, AdvancedAwesome.Repo,
   username: System.get_env("DATABASE_USERNAME", "postgres"),
-  password: System.get_env("POSTGRES_PASSWORD", "postgres"),
-  hostname: System.get_env("POSTGRES_HOST", "pghost"),
+  password: System.get_env("DATABASE_PASSWORD", "postgres"),
+  hostname: System.get_env("DATABASE_HOST", "pghost"),
   database: System.get_env("DATABASE_NAME", "postgres"),
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
