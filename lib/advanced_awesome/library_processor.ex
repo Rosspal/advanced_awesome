@@ -9,11 +9,13 @@ defmodule AdvancedAwesome.LibraryProcessor do
 
   @reg_github_libs ~r/\* \[\V+\]\(https:\/\/github.com\/(?<owner>[^\/]+)\/+(?<repository>[^\/]+)\) - (?<description>\V+)/
   @reg_header ~r/## (?<header>\D+)/
+  @chunk_size 50
 
-  def run() do
+  @spec run :: {:ok, :completed | :update_not_required} | {:error, :retry_later | :no_retry}
+  def run do
     with true <- LibrariesLastUpdate.need_update?(),
          {:ok, libs} <- get() do
-      chunks = Enum.chunk_every(libs, 50)
+      chunks = Enum.chunk_every(libs, @chunk_size)
       Enum.each(chunks, fn chunk -> enriching(chunk) |> Libraries.save() end)
       LibrariesLastUpdate.set()
       {:ok, :completed}
@@ -29,12 +31,12 @@ defmodule AdvancedAwesome.LibraryProcessor do
     end
   end
 
-  @spec get() :: list(map())
+  @spec get :: {:ok, list(map)}
   def get do
     with {:ok, encode_content} <- Github.get_awesome_readme_content(),
          {:ok, content} <- Base.decode64(encode_content, ignore: :whitespace) do
       content_list = String.split(content, "\n")
-      #      content_list = test()
+
       parse_fn =
         fn str, acc ->
           cond do
@@ -60,7 +62,7 @@ defmodule AdvancedAwesome.LibraryProcessor do
     end
   end
 
-  @spec enriching(list(map)) :: list(map())
+  @spec enriching(list(map)) :: list(map)
   def enriching(awesome_libs) do
     enriching_fn =
       fn awesome_lib, acc ->

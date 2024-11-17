@@ -44,7 +44,16 @@ defmodule AdvancedAwesome.MixProject do
       {:httpoison, "~> 2.2"},
       {:confex, "~> 3.5"},
       {:mox, "~> 1.2", only: :test},
-      {:credo, "~> 1.7", only: :test}
+      {:credo, "~> 1.7", only: :test},
+      {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
+      {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
+      {:heroicons,
+       github: "tailwindlabs/heroicons",
+       tag: "v2.1.1",
+       sparse: "optimized",
+       app: false,
+       compile: false,
+       depth: 1}
     ]
   end
 
@@ -56,10 +65,17 @@ defmodule AdvancedAwesome.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup"],
+      setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create", "ecto.migrate", "test"]
+      test: ["ecto.create", "ecto.migrate", "test"],
+      "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
+      "assets.build": ["tailwind test", "esbuild test"],
+      "assets.deploy": [
+        "tailwind test --minify",
+        "esbuild test --minify",
+        "phx.digest"
+      ]
     ]
   end
 end

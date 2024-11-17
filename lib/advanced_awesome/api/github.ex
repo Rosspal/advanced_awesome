@@ -6,7 +6,7 @@ defmodule AdvancedAwesome.API.Github do
   @awesome_repo Confex.fetch_env!(:advanced_awesome, :github)[:awesome_repo]
   @base_url Confex.fetch_env!(:advanced_awesome, :github)[:url]
 
-  def get_awesome_readme_content() do
+  def get_awesome_readme_content do
     url = "#{@base_url}/repos/#{@awesome_repo}/readme"
 
     with {:ok, %HTTPoison.Response{body: body, status_code: 200}} <-
@@ -53,7 +53,7 @@ defmodule AdvancedAwesome.API.Github do
     end
   end
 
-  defp headers() do
+  defp headers do
     token = "Bearer " <> Confex.fetch_env!(:advanced_awesome, :github)[:token]
     [{"authorization", token}]
   end

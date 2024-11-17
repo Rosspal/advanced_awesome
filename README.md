@@ -1,18 +1,31 @@
 # AdvancedAwesome
 
-To start your Phoenix server:
+Проект для наглядного отображения awesome библиотек на Elixir.
 
-  * Run `mix setup` to install and setup dependencies
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+## Быстрый запуск
+Переменные нужно указать в файле `.local.env`, в частности необходимо указать `GITHUB_TOKEN`.  
+[Инструкция](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) по получению токена.
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+Запуск контейнера c Postgres
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+```
+make up
+```
 
-## Learn more
+Для запуска тестов
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+```
+make test
+```
+
+Для локального запуска в режиме разработчика
+
+```
+make iex-server
+```
+
+Завершить контейнер с Postgres
+
+```
+make down
+```

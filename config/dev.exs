@@ -2,10 +2,10 @@ import Config
 
 # Configure your database
 config :advanced_awesome, AdvancedAwesome.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "postgres",
+  username: System.get_env("DATABASE_USERNAME", "postgres"),
+  password: System.get_env("DATABASE_PASSWORD", "postgres"),
+  hostname: System.get_env("DATABASE_HOST", "pghost"),
+  database: System.get_env("DATABASE_NAME", "postgres"),
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -24,7 +24,10 @@ config :advanced_awesome, AdvancedAwesomeWeb.Endpoint,
   code_reloader: true,
   debug_errors: true,
   secret_key_base: "FbG57efBVOfqomLkRqL8qnrGleVSSvzOpoE5wuXSVt6QSjbR1x3JtoOP2NJ7PshE",
-  watchers: []
+  watchers: [
+    esbuild: {Esbuild, :install_and_run, [:test, ~w(--sourcemap=inline --watch)]},
+    tailwind: {Tailwind, :install_and_run, [:test, ~w(--watch)]}
+  ]
 
 # ## SSL Support
 #

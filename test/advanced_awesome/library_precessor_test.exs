@@ -1,9 +1,12 @@
-defmodule AdvancedAwesome.LibraryProcessedTest do
-  use AdvancedAwesomeWeb.ConnCase, async: true
+defmodule AdvancedAwesome.LibraryProcessorTest do
+  use AdvancedAwesome.DataCase, async: true
+
+  import Mox
+
   alias AdvancedAwesome.LibraryProcessor
   alias AdvancedAwesome.Repo
   alias AdvancedAwesome.Schemas.Libraries
-  import Mox
+  alias Support.Factory
 
   @http_client HttpAdapterMock
   @awesome_repo Confex.fetch_env!(:advanced_awesome, :github)[:awesome_repo]
@@ -163,7 +166,7 @@ defmodule AdvancedAwesome.LibraryProcessedTest do
   end
 
   describe "LibrariesProcessed.run():" do
-    test "checking successful run" do
+    setup do
       content =
         """
         ## Application
@@ -184,6 +187,10 @@ defmodule AdvancedAwesome.LibraryProcessedTest do
 
       mock_repo_info("owner", "repository", body)
 
+      :ok
+    end
+
+    test "checking successful run when last update date is not set" do
       assert LibraryProcessor.run() == {:ok, :completed}
 
       assert [
@@ -199,6 +206,31 @@ defmodule AdvancedAwesome.LibraryProcessedTest do
                  header: "Application"
                }
              ] = Repo.all(Libraries)
+    end
+
+    test "checking successful run when last update date is set" do
+      old_date = ~D[2021-02-27]
+      Factory.insert!(:libraries_last_update, %{updated_at: old_date})
+
+      assert LibraryProcessor.run() == {:ok, :completed}
+
+      assert [
+               %{
+                 owner: "owner",
+                 repository: "repository",
+                 description: "Flow-based Application Layer Framework.",
+                 stargazers_count: 100,
+                 pushed_at: ~D[2021-02-28],
+                 homepage: "http://homepahe",
+                 license: "MIT",
+                 url: "https://github.com/owner/repository",
+                 header: "Application"
+               }
+             ] = Repo.all(Libraries)
+
+      new_date = AdvancedAwesome.LibrariesLastUpdate.get()
+
+      assert new_date != old_date
     end
   end
 

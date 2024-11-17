@@ -8,8 +8,8 @@ defmodule AdvancedAwesome.UpdateScheduler do
   @end_of_the_day ~T[23:59:59.999]
   @attempt_delay 5 * 60 * 1000
 
-  def start_link(state) do
-    GenServer.start_link(__MODULE__, state)
+  def start_link(opts) do
+    GenServer.start_link(__MODULE__, opts)
   end
 
   def init(_opts) do
@@ -43,7 +43,7 @@ defmodule AdvancedAwesome.UpdateScheduler do
     end_day_ms()
   end
 
-  def end_day_ms() do
+  def end_day_ms do
     now = DateTime.utc_now()
     launch_time = DateTime.new!(Date.utc_today(), @end_of_the_day)
     DateTime.diff(launch_time, now) * 1000

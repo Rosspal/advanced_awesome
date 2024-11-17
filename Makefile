@@ -10,15 +10,18 @@ up:
 
 test:
 	set -o allexport; source .local.env; set +o allexport; \
+	mix deps.get; \
 	mix test
 
 iex:
 	set -o allexport; source .local.env; set +o allexport; \
+	mix deps.get; \
 	mix ecto.setup; \
 	iex -S mix
 
 iex-server:
 	set -o allexport; source .local.env; set +o allexport; \
+	mix deps.get; \
 	mix ecto.setup; \
 	iex -S mix phx.server
 

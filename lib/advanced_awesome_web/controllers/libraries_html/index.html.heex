@@ -1,3 +1,5 @@
+<h1 class="text-gray-800 font-semibold text-2xl mt-8 mb-4">Advanced awesome list</h1>
+
 <%= for {header, header_libs} <- @libs do %>
   <h1 class="text-gray-800 font-semibold text-2xl mt-8 mb-4"><%= header %></h1>
 
@@ -8,7 +10,7 @@
           <%= lib.repository %>
         </a>
         - <%= lib.description %><br /> ⭐: <%= lib.stargazers_count %> <br /> Last commit:
-        <.days_without_commit date={lib.pushed_at} /> <br />
+        <.days_without_commit date={lib.pushed_at} /> <br /> <%= lib.license %> <br />
       </li>
     <% end %>
   </ul>
