@@ -24,7 +24,10 @@ config :advanced_awesome, AdvancedAwesomeWeb.Endpoint,
   code_reloader: true,
   debug_errors: true,
   secret_key_base: "FbG57efBVOfqomLkRqL8qnrGleVSSvzOpoE5wuXSVt6QSjbR1x3JtoOP2NJ7PshE",
-  watchers: []
+  watchers: [
+    esbuild: {Esbuild, :install_and_run, [:test, ~w(--sourcemap=inline --watch)]},
+    tailwind: {Tailwind, :install_and_run, [:test, ~w(--watch)]}
+  ]
 
 # ## SSL Support
 #
