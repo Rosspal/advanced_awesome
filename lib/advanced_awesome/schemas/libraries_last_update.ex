@@ -10,7 +10,7 @@ defmodule AdvancedAwesome.Schemas.LibrariesLastUpdate do
     field :updated_at, :date
   end
 
-  def create_changeset() do
+  def create_changeset do
     cast(%__MODULE__{}, %{updated_at: Date.utc_today()}, [:updated_at])
   end
 
