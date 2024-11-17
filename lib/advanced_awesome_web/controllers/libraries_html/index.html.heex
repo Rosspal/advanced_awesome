@@ -1,0 +1,15 @@
+<%= for {header, header_libs} <- @libs do %>
+  <h1 class="text-gray-800 font-semibold text-2xl mt-8 mb-4"><%= header %></h1>
+
+  <ul class="list-disc list-outside my-5 ml-8" dir="auto">
+    <%= for lib <- header_libs do %>
+      <li class="my-0">
+        <a class="font-medium underline text-gray-900 hover:no-underline" href={lib.url}>
+          <%= lib.repository %>
+        </a>
+        - <%= lib.description %><br /> ⭐: <%= lib.stargazers_count %> <br /> Last commit:
+        <.days_without_commit date={lib.pushed_at} /> <br />
+      </li>
+    <% end %>
+  </ul>
+<% end %>
