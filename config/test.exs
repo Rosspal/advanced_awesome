@@ -6,10 +6,10 @@ import Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :advanced_awesome, AdvancedAwesome.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "pghost",
-  database: "postgres",
+  username: System.get_env("POSTGRES_USER", "postgres"),
+  password: System.get_env("POSTGRES_PASSWORD", "postgres"),
+  hostname: System.get_env("POSTGRES_HOST", "pghost"),
+  database: System.get_env("POSTGRES_DB", "postgres"),
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: System.schedulers_online() * 2
 
