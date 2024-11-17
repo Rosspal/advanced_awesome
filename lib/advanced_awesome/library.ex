@@ -10,6 +10,7 @@ defmodule AdvancedAwesome.LibraryProcessor do
   @reg_github_libs ~r/\* \[\V+\]\(https:\/\/github.com\/(?<owner>[^\/]+)\/+(?<repository>[^\/]+)\) - (?<description>\V+)/
   @reg_header ~r/## (?<header>\D+)/
 
+  @spec run() :: {:ok, :completed | :update_not_required} | {:error, :retry_later | :no_retry}
   def run() do
     with true <- LibrariesLastUpdate.need_update?(),
          {:ok, libs} <- get() do
@@ -29,7 +30,7 @@ defmodule AdvancedAwesome.LibraryProcessor do
     end
   end
 
-  @spec get() :: list(map())
+  @spec get() :: {:ok, list(map)}
   def get do
     with {:ok, encode_content} <- Github.get_awesome_readme_content(),
          {:ok, content} <- Base.decode64(encode_content, ignore: :whitespace) do
@@ -60,7 +61,7 @@ defmodule AdvancedAwesome.LibraryProcessor do
     end
   end
 
-  @spec enriching(list(map)) :: list(map())
+  @spec enriching(list(map)) :: list(map)
   def enriching(awesome_libs) do
     enriching_fn =
       fn awesome_lib, acc ->

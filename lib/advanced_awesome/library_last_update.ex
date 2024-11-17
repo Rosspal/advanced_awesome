@@ -17,6 +17,7 @@ defmodule AdvancedAwesome.LibrariesLastUpdate do
     end
   end
 
+  @spec need_update? :: boolean
   def need_update?() do
     case Repo.one(LLUSchema) do
       nil ->
