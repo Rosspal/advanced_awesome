@@ -54,7 +54,7 @@ config :phoenix, :json_library, Jason
 config :advanced_awesome, :github,
   url: "https://api.github.com",
   token: System.get_env("GITHUB_TOKEN", "token"),
-  awesome_repo: "h4cc/awesome-elixir"
+  awesome_repo: System.get_env("AWESOME_REPO", "h4cc/awesome-elixir")
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
